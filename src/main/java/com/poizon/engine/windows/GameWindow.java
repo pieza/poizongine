@@ -1,14 +1,18 @@
-package com.poizon.engine.ui;
+package com.poizon.engine.windows;
 
 import com.poizon.engine.config.Settings;
-import com.poizon.engine.containers.GameContainer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-public class Window implements IWindow {
+/**
+ * UI Window where the user interacts and the game will be displayed.
+ *
+ * @author Jose Ulloa
+ */
+public class GameWindow implements IWindow {
 
     private JFrame frame;
     private BufferedImage image;
@@ -17,7 +21,7 @@ public class Window implements IWindow {
     private Graphics graphics;
 
 
-    public Window(Settings settings) {
+    public GameWindow(Settings settings) {
         int width = settings.getScreenWidth(), height = settings.getScreenHeight();
         float scale = settings.getScale();
 
@@ -36,6 +40,10 @@ public class Window implements IWindow {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
+    }
+
+    @Override
+    public void show() {
         frame.setVisible(true);
 
         canvas.createBufferStrategy(2);
@@ -47,5 +55,15 @@ public class Window implements IWindow {
     public void update() {
         graphics.drawImage(image,0, 0, canvas.getWidth(), canvas.getHeight(), null);
         bufferStrategy.show();
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public Canvas getCanvas() {
+        return canvas;
     }
 }

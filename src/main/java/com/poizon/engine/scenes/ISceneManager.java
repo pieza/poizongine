@@ -1,4 +1,9 @@
 package com.poizon.engine.scenes;
 
-public class ISceneManager {
+import com.poizon.engine.exceptions.MissingSceneException;
+
+public interface ISceneManager {
+    void addScene(String key, GameScene scene);
+    void removeScene(String key);
+    void setScene(String key) throws MissingSceneException;
 }

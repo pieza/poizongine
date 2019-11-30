@@ -1,9 +1,19 @@
 package com.poizon.engine;
 
-public class EnginePlayground {
-    public static void main(String[] args) {
-        GameContainer game = new GameContainer();
+import com.poizon.engine.exceptions.MissingSceneException;
+import com.poizon.engine.scene.TestGameScene;
 
-        game.start();
+public class EnginePlayground {
+
+    public static void main(String[] args) throws MissingSceneException {
+        Game.addScene("TEST", new TestGameScene());
+        Game.start();
+
+        try {
+            Game.setScene("TEST");
+        } catch (MissingSceneException e) {
+            e.printStackTrace();
+        }
+
     }
 }
