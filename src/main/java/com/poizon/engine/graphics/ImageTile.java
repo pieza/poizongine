@@ -1,5 +1,10 @@
 package com.poizon.engine.graphics;
 
+/**
+ * Handles image tiles and render a specific piece of it.
+ *
+ * @author Jose Ulloa
+ */
 public class ImageTile extends Image {
     private int tileWidth;
     private int tileHeight;

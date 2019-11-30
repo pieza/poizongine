@@ -6,6 +6,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * Handles images files to render.
+ *
+ * @author Jose Ulloa
+ */
 public class Image {
     private int width, height;
     private int[] pixels;

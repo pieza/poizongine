@@ -10,6 +10,7 @@ public class Settings {
     private int screenWidth;
     private int frameRate;
     private float scale;
+    private boolean lockFrameRate;
     private boolean isDebug;
 
     public Settings() {
@@ -17,14 +18,16 @@ public class Settings {
         this.screenWidth = 1600;
         this.frameRate = 60;
         this.scale = 1f;
+        this.lockFrameRate = true;
         this.isDebug = false;
     }
 
-    public Settings(int screenHeight, int screenWidth, int frameRate, float scale, boolean isDebug) {
+    public Settings(int screenHeight, int screenWidth, int frameRate, float scale, boolean lockFrameRate, boolean isDebug) {
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         this.frameRate = frameRate;
         this.scale = scale;
+        this.lockFrameRate = lockFrameRate;
         this.isDebug = isDebug;
     }
 
@@ -58,6 +61,14 @@ public class Settings {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isLockFrameRate() {
+        return lockFrameRate;
+    }
+
+    public void setLockFrameRate(boolean lockFrameRate) {
+        this.lockFrameRate = lockFrameRate;
     }
 
     public boolean isDebug() {

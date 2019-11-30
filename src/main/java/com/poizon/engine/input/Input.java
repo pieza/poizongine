@@ -18,4 +18,16 @@ public interface Input extends KeyListener, MouseListener, MouseMotionListener, 
     int getMouseY();
 
     int getScroll();
+
+    boolean isKey(int keyCode);
+
+    boolean isKeyUp(int keyCode);
+
+    boolean isKeyDown(int keyCode);
+
+    boolean isButton(int buttonCode);
+
+    boolean isButtonUp(int buttonCode);
+
+    boolean isButtonDown(int buttonCode);
 }

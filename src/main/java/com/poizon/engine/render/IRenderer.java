@@ -1,5 +1,6 @@
 package com.poizon.engine.render;
 
+import com.poizon.engine.graphics.Font;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.graphics.ImageTile;
 
@@ -28,5 +29,15 @@ public interface IRenderer {
      * @param offX Position x.
      * @param offY Position y.
      */
-    void drawImageTile(ImageTile image, int offX, int offY,int tileX, int tileY);
+    void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY);
+
+    /**
+     * Draws a text on the screen or window.
+     * @param text Text wanted to be draw.
+     * @param offX Position x.
+     * @param offY Position y.
+     * @param color Color in hexadecimal.
+     * @see com.poizon.engine.graphics.Color
+     */
+    void drawText(String text, Font font, int offX, int offY, int color);
 }

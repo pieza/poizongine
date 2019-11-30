@@ -1,6 +1,8 @@
 package com.poizon.engine.render;
 
 import com.poizon.engine.config.Settings;
+import com.poizon.engine.graphics.Color;
+import com.poizon.engine.graphics.Font;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.graphics.ImageTile;
 import com.poizon.engine.windows.IWindow;
@@ -23,7 +25,7 @@ public class Renderer implements IRenderer {
     }
 
     private void setPixel(int x, int y, int value) {
-        if((x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) || value == 0xffff00ff ) {
+        if((x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) || ((value >> 24) & 0xff) == 0) {
             return;
         }
 
@@ -84,6 +86,26 @@ public class Renderer implements IRenderer {
             for (int x = newX; x < newWidth; x++) {
                 setPixel(x + offX, y + offY, image.getPixels()[(x + tileX * image.getTileWidth()) + (y + tileY * image.getTileHeight()) * image.getWidth()]);
             }
+        }
+    }
+
+    @Override
+    public void drawText(String text, Font font, int offX, int offY, int color) {
+        text = text.toUpperCase();
+        int offset = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            int unicode = text.codePointAt(i) - 32;
+
+            for (int y = 0; y < font.getFontImage().getHeight(); y++) {
+                for (int x = 0; x < font.getWidths()[unicode]; x++) {
+                    if(font.getFontImage().getPixels()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getWidth()] == Color.WHITE){
+                        setPixel(x + offX + offset, y + offY, color );
+                    }
+                }
+            }
+
+            offset += font.getWidths()[unicode];
         }
     }
 }

@@ -2,10 +2,12 @@ package com.poizon.engine.containers;
 
 import com.poizon.engine.config.Settings;
 import com.poizon.engine.exceptions.MissingSceneException;
+import com.poizon.engine.graphics.Font;
 import com.poizon.engine.input.GameInput;
 import com.poizon.engine.input.Input;
 import com.poizon.engine.render.IRenderer;
 import com.poizon.engine.render.Renderer;
+import com.poizon.engine.scenes.DebugScene;
 import com.poizon.engine.scenes.GameScene;
 import com.poizon.engine.scenes.ISceneManager;
 import com.poizon.engine.windows.IWindow;
@@ -40,13 +42,14 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     private Map<String, GameScene> scenes = new HashMap<String, GameScene>();
 
+    private DebugScene debugScene = new DebugScene();
+
     public GameContainer() {
         logger = new ConsoleLogger();
         settings = new Settings();
         window = new GameWindow(settings);
         renderer = new Renderer(window, settings);
         input = new GameInput(window, settings);
-
         UPDATE_CAP = 1.0 / settings.getFrameRate();
     }
 
@@ -56,7 +59,6 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         this.window = window;
         this.renderer = renderer;
         this.input = input;
-
         UPDATE_CAP = 1.0 / settings.getFrameRate();
     }
 
@@ -95,7 +97,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         int fps = 0;
 
         while(isRunning) {
-            shouldRender = false;
+            shouldRender = !settings.isLockFrameRate();
             firstTime = Time.now();
             passedTime = firstTime - lastTime;
             lastTime = firstTime;
@@ -116,15 +118,20 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                     frameTime = 0;
                     fps = frames;
                     frames = 0;
+                    if(settings.isDebug()) debugScene.update((float) fps);
                     logger.log(LogLevel.DEBUG, "FPS: " + fps);
                 }
             }
 
             if(shouldRender) {
                 renderer.clear();
+
+                if(settings.isDebug()) debugScene.render();
+
                 GameScene scene = getActualScene();
                 if(scene != null)
                     scene.render();
+
                 window.update();
                 frames++;
             } else {
