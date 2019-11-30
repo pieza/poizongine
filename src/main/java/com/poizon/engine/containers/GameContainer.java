@@ -40,7 +40,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     private String actualScene = "";
 
-    private Map<String, GameScene> scenes = new HashMap<String, GameScene>();
+    private Map<String, GameScene> scenes = new HashMap<>();
 
     private DebugScene debugScene = new DebugScene();
 

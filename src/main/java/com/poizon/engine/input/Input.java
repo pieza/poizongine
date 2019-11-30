@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelListener;
  *
  * @author Jose Ulloa
  */
-public interface Input extends KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+public interface Input {
     void update();
 
     int getMouseX();

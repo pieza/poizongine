@@ -2,18 +2,15 @@ package com.poizon.engine.input;
 
 import com.poizon.engine.config.Settings;
 import com.poizon.engine.windows.IWindow;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
 
 /**
  * Handles the input controllers like keyboard and mouse.
  *
  * @author Jose Ulloa
  */
-public class GameInput implements Input {
+public class GameInput implements Input, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
     private Settings settings;
     private IWindow window;
 

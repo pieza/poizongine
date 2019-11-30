@@ -24,7 +24,7 @@ import com.poizon.engine.utils.log.LogLevel;
  */
 public final class Game {
     private static GameContainer gameContainer;
-    private static ILogger logger;
+    public static ILogger logger;
     private static IWindow window;
 
     public static IRenderer renderer;
@@ -54,6 +54,10 @@ public final class Game {
         new Thread(() -> {
             gameContainer.start();
         }).start();
+
+    }
+
+    public static synchronized void init() {
 
     }
 
