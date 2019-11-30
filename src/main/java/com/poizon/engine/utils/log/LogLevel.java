@@ -1,5 +1,5 @@
 package com.poizon.engine.utils.log;
 
-public enum LogTypes {
+public enum LogLevel {
     INFO, ERROR, WARN, DEBUG, TRACE
 }

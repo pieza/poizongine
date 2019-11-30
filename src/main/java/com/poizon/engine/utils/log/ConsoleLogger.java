@@ -4,17 +4,17 @@ import com.poizon.engine.utils.time.Time;
 
 public class ConsoleLogger implements ILogger {
 
-    private String getMessage(String message, LogTypes type){
+    private String getMessage(String message, LogLevel type){
         return String.format("%s - [%s]: %s", Time.current(), type, message);
     }
 
     @Override
     public void log(String message) {
-        log(message, LogTypes.INFO);
+        log(LogLevel.INFO, message);
     }
 
     @Override
-    public void log(String message, LogTypes type) {
+    public void log(LogLevel type, String message) {
         switch (type) {
             case ERROR:
                 System.err.println(getMessage(message, type));

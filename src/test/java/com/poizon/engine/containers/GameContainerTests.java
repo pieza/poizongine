@@ -1,5 +1,6 @@
 package com.poizon.engine;
 
+import com.poizon.engine.containers.GameContainer;
 import org.junit.Test;
 import org.junit.Assert;
 
