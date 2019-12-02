@@ -28,3 +28,9 @@ dependencies {
     runtime files('resources/')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.poizon.engine.Game'
+    }
+}

@@ -29,12 +29,27 @@ public final class Game {
 
     public static IRenderer renderer;
     public static Input input;
-    public static Settings settings;
+    // load defaults settings
+    public static Settings settings = new Settings();
 
-    private Game() {}
+    private Game() { }
 
     static {
-        settings = new Settings();
+    }
+
+    /**
+     * Starts the game loop using the game container, this must have all configuration properly loaded.
+     */
+    public static synchronized void start() {
+        init();
+        logger.log(LogLevel.INFO, "Starting game loop.");
+        new Thread(() -> {
+            gameContainer.start();
+        }).start();
+
+    }
+
+    private static synchronized void init() {
         logger = new ConsoleLogger(settings.isDebug());
         window = new GameWindow(settings);
         renderer = new Renderer(window, settings);
@@ -43,22 +58,7 @@ public final class Game {
         ExceptionLogger.logger = logger;
 
         gameContainer = new GameContainer(logger, window, renderer, input, settings);
-        logger.log(LogLevel.DEBUG, "Default game settings loaded");
-    }
-
-    /**
-     * Starts the game loop using the game container, this must have all configuration properly loaded.
-     */
-    public static synchronized void start() {
-        logger.log(LogLevel.INFO, "Starting game loop.");
-        new Thread(() -> {
-            gameContainer.start();
-        }).start();
-
-    }
-
-    public static synchronized void init() {
-
+        logger.log(LogLevel.DEBUG, "Game settings loaded");
     }
 
     public static void addScene(String key, GameScene scene) {
