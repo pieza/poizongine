@@ -7,10 +7,10 @@ public class EnginePlayground {
 
     public static void main(String[] args) {
         Game.settings.setDebug(true);
-        Game.settings.setLockFrameRate(false);
-        Game.addScene("TEST", new TestGameScene());
+
         Game.start();
 
+        Game.addScene("TEST", new TestGameScene());
         try {
             Game.setScene("TEST");
         } catch (MissingSceneException e) {

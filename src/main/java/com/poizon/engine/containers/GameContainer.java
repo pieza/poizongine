@@ -110,8 +110,11 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 shouldRender = true;
 
                 GameScene scene = getActualScene();
-                if(scene != null)
+                if(scene != null) {
                     scene.update((float)UPDATE_CAP);
+                    scene.updateObjects((float)UPDATE_CAP);
+                }
+
                 input.update();
 
                 if(frameTime >= 1.0) {
@@ -126,11 +129,13 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
             if(shouldRender) {
                 renderer.clear();
 
-                if(settings.isDebug()) debugScene.render();
-
                 GameScene scene = getActualScene();
-                if(scene != null)
+                if(scene != null) {
                     scene.render();
+                    scene.renderObjects();
+                }
+
+                if(settings.isDebug()) debugScene.render();
 
                 window.update();
                 frames++;

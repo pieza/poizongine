@@ -14,10 +14,10 @@ public class Settings {
     private boolean isDebug;
 
     public Settings() {
-        this.screenHeight = 900;
-        this.screenWidth = 1600;
+        this.screenHeight = 320;
+        this.screenWidth = 480;
         this.frameRate = 60;
-        this.scale = 1f;
+        this.scale = 2f;
         this.lockFrameRate = true;
         this.isDebug = false;
     }
