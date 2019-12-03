@@ -9,10 +9,10 @@ import static com.poizon.engine.Game.input;
 
 public class Player extends GameObject {
     private SoundClip sound = new SoundClip("/audio/shot.wav");
-    int velocity = 20;
+    int velocity = 2;
 
     public Player() {
-        super("/sprites/test.png");
+        super("/sprites/player.png");
     }
 
     @Override
