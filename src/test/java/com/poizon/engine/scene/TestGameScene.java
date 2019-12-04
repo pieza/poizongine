@@ -15,10 +15,8 @@ import static com.poizon.engine.Game.*;
 
 public class TestGameScene extends GameScene {
 
-    private Image image;
 
     public TestGameScene() {
-        this.image = new Image("/sprites/test.png");
         objects.put("PLAYER", new Player());
     }
 
@@ -29,6 +27,6 @@ public class TestGameScene extends GameScene {
 
     @Override
     public void render() {
-        renderer.drawImage(image, input.getMouseX()-image.getWidth()/2, input.getMouseY()-image.getHeight()/2);
+
     }
 }
