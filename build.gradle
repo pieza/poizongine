@@ -16,6 +16,10 @@ sourceSets {
         java {
             srcDirs = ['src/main/java']
         }
+        resources {
+            srcDir 'resources'
+            include '*'
+        }
     }
     test {
         java {
@@ -25,11 +29,14 @@ sourceSets {
 }
 
 dependencies {
-    runtime files('resources/')
+    runtime files('src/main/resources/')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 jar {
+    from('.') {
+        include 'resources/*'
+    }
     manifest {
         attributes 'Main-Class': 'com.poizon.engine.Game'
     }

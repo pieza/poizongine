@@ -8,6 +8,10 @@ public abstract class GameObject {
     protected int positionX, positionY;
     protected boolean visible;
 
+    public GameObject() {
+
+    }
+
     public GameObject(String path) {
         this.sprite = new Image(path);
         this.positionX = 0;
@@ -33,7 +37,9 @@ public abstract class GameObject {
         if(visible) Game.renderer.drawImage(sprite, positionX, positionY);
     }
 
-    public abstract void update(float deltaTime);
+    public void update(float deltaTime) {
+        // do nothing
+    }
 
     public int getPositionX() {
         return positionX;
