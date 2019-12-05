@@ -2,6 +2,7 @@ package com.poizon.engine.objects;
 
 import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Image;
+import com.poizon.engine.graphics.ImageTile;
 
 public abstract class GameObject {
     protected Image sprite;
@@ -9,32 +10,13 @@ public abstract class GameObject {
     protected boolean visible;
 
     public GameObject() {
-
-    }
-
-    public GameObject(String path) {
-        this.sprite = new Image(path);
         this.positionX = 0;
         this.positionY = 0;
         this.visible = true;
     }
 
-    public GameObject(String path, int positionX, int positionY) {
-        this.sprite = new Image(path);
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.visible = true;
-    }
-
-    public GameObject(String path, int positionX, int positionY, boolean visible) {
-        this.sprite = new Image(path);
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.visible = visible;
-    }
-
     public void render() {
-        if(visible) Game.renderer.drawImage(sprite, positionX, positionY);
+        if(!(sprite instanceof ImageTile) && visible && sprite != null) Game.renderer.drawImage(sprite, positionX, positionY);
     }
 
     public void update(float deltaTime) {

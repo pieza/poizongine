@@ -1,6 +1,7 @@
 package com.poizon.engine.objects;
 
 import com.poizon.engine.audio.SoundClip;
+import com.poizon.engine.graphics.ImageTile;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -12,7 +13,7 @@ public class Player extends GameObject {
     int velocity = 2;
 
     public Player() {
-        super("/sprites/player.png");
+        sprite = new ImageTile("/sprites/player.png", 19, 21);
     }
 
     @Override
