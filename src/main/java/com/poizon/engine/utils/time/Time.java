@@ -14,4 +14,6 @@ public class Time  {
         Date date = new Date();
         return formatter.format(date);
     }
+
+    public static float deltaTime = 0;
 }

@@ -19,7 +19,7 @@ public abstract class GameObject {
         if(!(sprite instanceof ImageTile) && visible && sprite != null) Game.renderer.drawImage(sprite, positionX, positionY);
     }
 
-    public void update(float deltaTime) {
+    public void update() {
         // do nothing
     }
 

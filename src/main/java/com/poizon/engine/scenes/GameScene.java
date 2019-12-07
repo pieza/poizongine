@@ -10,7 +10,7 @@ import java.util.Map;
 public abstract class GameScene {
     protected Map<String, GameObject> objects = new HashMap();
 
-    public abstract void update(float deltaTime);
+    public abstract void update();
 
     public abstract  void render();
 
@@ -20,9 +20,9 @@ public abstract class GameScene {
         });
     }
 
-    public void updateObjects(float deltaTime) {
+    public void updateObjects() {
         objects.forEach((key, value) -> {
-            value.update(deltaTime);
+            value.update();
         });
     }
 }

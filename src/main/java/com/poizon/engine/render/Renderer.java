@@ -65,7 +65,7 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY) {
+    public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY ) {
         // do not render if
         if(offX < -image.getTileWidth()) return;
         if(offY < -image.getTileHeight()) return;
@@ -74,8 +74,8 @@ public class Renderer implements IRenderer {
 
         int newX= 0;
         int newY = 0;
-        int newWidth = image.getWidth();
-        int newHeight = image.getHeight();
+        int newWidth = image.getTileWidth();
+        int newHeight = image.getTileHeight();
 
         if(offX < 0) newX -= offX;
         if(offY < 0) newY -= offY;

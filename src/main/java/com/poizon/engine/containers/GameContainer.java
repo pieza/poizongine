@@ -109,10 +109,12 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 unprocessedTime -= UPDATE_CAP;
                 shouldRender = true;
 
+                Time.deltaTime = (float)UPDATE_CAP;
+
                 GameScene scene = getActualScene();
                 if(scene != null) {
-                    scene.update((float)UPDATE_CAP);
-                    scene.updateObjects((float)UPDATE_CAP);
+                    scene.update();
+                    scene.updateObjects();
                 }
 
                 input.update();
