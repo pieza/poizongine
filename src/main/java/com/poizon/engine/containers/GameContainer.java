@@ -111,6 +111,8 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
                 Time.deltaTime = (float)UPDATE_CAP;
 
+                if(settings.isDebug()) debugScene.update();
+
                 GameScene scene = getActualScene();
                 if(scene != null) {
                     scene.update();
@@ -123,7 +125,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                     frameTime = 0;
                     fps = frames;
                     frames = 0;
-                    if(settings.isDebug()) debugScene.update((float) fps);
+                    Time.fps = fps;
                     logger.log(LogLevel.DEBUG, "FPS: " + fps);
                 }
             }

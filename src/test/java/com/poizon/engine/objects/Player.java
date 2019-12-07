@@ -17,7 +17,7 @@ public class Player extends GameObject {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update() {
         if(input.isKeyDown(KeyEvent.VK_SPACE)) {
             sound.play();
         }

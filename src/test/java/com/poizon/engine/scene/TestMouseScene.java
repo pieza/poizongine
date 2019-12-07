@@ -14,7 +14,7 @@ public class TestMouseScene extends GameScene {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update() {
 
     }
 
