@@ -51,12 +51,13 @@ public final class Game {
 
     private static synchronized void init() {
         logger = new ConsoleLogger(settings.isDebug());
+        logger.log(LogLevel.DEBUG, "Initializing game...");
         window = new GameWindow(settings);
         renderer = new Renderer(window, settings);
         input = new GameInput(window, settings);
-
         ExceptionLogger.logger = logger;
-
+        logger.log(LogLevel.DEBUG, "Creating game container");
+        logger.log(LogLevel.TRACE, "Using settings: " + settings.toString());
         gameContainer = new GameContainer(logger, window, renderer, input, settings);
         logger.log(LogLevel.DEBUG, "Game settings loaded");
     }

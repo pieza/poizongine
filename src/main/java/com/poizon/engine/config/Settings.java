@@ -10,25 +10,41 @@ public class Settings {
     private int screenWidth;
     private int frameRate;
     private float scale;
+    private boolean fullScreen;
     private boolean lockFrameRate;
     private boolean isDebug;
 
     public Settings() {
-        this.screenHeight = 320;
+        this.screenHeight = 270;
         this.screenWidth = 480;
         this.frameRate = 60;
         this.scale = 2f;
+        this.fullScreen = false;
         this.lockFrameRate = true;
         this.isDebug = false;
     }
 
-    public Settings(int screenHeight, int screenWidth, int frameRate, float scale, boolean lockFrameRate, boolean isDebug) {
+    public Settings(int screenHeight, int screenWidth, int frameRate, float scale, boolean fullScreen, boolean lockFrameRate, boolean isDebug) {
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         this.frameRate = frameRate;
         this.scale = scale;
+        this.fullScreen = fullScreen;
         this.lockFrameRate = lockFrameRate;
         this.isDebug = isDebug;
+    }
+
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "screenHeight=" + screenHeight +
+                ", screenWidth=" + screenWidth +
+                ", frameRate=" + frameRate +
+                ", scale=" + scale +
+                ", fullScreen=" + fullScreen +
+                ", lockFrameRate=" + lockFrameRate +
+                ", isDebug=" + isDebug +
+                '}';
     }
 
     public int getScreenHeight() {
@@ -61,6 +77,14 @@ public class Settings {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isFullScreen() {
+        return fullScreen;
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        this.fullScreen = fullScreen;
     }
 
     public boolean isLockFrameRate() {

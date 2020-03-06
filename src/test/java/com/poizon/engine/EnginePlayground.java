@@ -8,6 +8,8 @@ public class EnginePlayground {
 
     public static void main(String[] args) {
         Game.settings.setDebug(true);
+//        Game.settings.setScale(4f);
+//        Game.settings.setFullScreen(false);
 
         Game.start();
 
