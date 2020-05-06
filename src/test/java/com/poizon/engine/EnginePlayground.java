@@ -7,17 +7,14 @@ import com.poizon.engine.scene.TestMouseScene;
 public class EnginePlayground {
 
     public static void main(String[] args) {
-        Game.settings.setDebug(true);
-//        Game.settings.setScale(4f);
-//        Game.settings.setFullScreen(false);
+        Game game = new Game();
+        game.settings.setDebug(true);
+        game.addScene("TEST", new TestGameScene());
+        game.addScene("MOUSE", new TestMouseScene());
 
-        Game.start();
-
-        Game.addScene("TEST", new TestGameScene());
-        Game.addScene("MOUSE", new TestMouseScene());
-
+        game.start();
         try {
-            Game.setScene("TEST");
+            game.setScene("TEST");
         } catch (MissingSceneException e) {
             e.printStackTrace();
         }

@@ -1,10 +1,8 @@
 package com.poizon.engine.scene;
 
+import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.scenes.GameScene;
-
-import static com.poizon.engine.Game.input;
-import static com.poizon.engine.Game.renderer;
 
 public class TestMouseScene extends GameScene {
     private Image image;
@@ -14,12 +12,12 @@ public class TestMouseScene extends GameScene {
     }
 
     @Override
-    public void update() {
+    public void update(Game game) {
 
     }
 
     @Override
-    public void render() {
-        renderer.drawImage(image, input.getMouseX()-image.getWidth()/2, input.getMouseY()-image.getHeight()/2);
+    public void render(Game game) {
+        game.renderer.drawImage(image, game.input.getMouseX()-image.getWidth()/2, game.input.getMouseY()-image.getHeight()/2);
     }
 }

@@ -17,31 +17,34 @@ import com.poizon.engine.utils.log.LogLevel;
 
 /**
  * Entry point of the engine, unique game instance that handles all dependencies to run the game.
- * Static class to force one instance of the game.
  *
  * @see GameContainer
  * @author Jose Ulloa
  */
 public final class Game {
-    private static GameContainer gameContainer;
-    public static ILogger logger;
-    private static IWindow window;
+    private GameContainer gameContainer;
+    public IWindow window;
+    public ILogger logger;
+    public IRenderer renderer;
+    public Input input;
+    public Settings settings;
 
-    public static IRenderer renderer;
-    public static Input input;
-    // load defaults settings
-    public static Settings settings = new Settings();
-
-    private Game() { }
-
-    static {
+    public Game() {
+        // load defaults settings
+        settings = new Settings();
+        this.init();
     }
+
+    public Game(Settings settings) {
+        this.settings = settings;
+        this.init();
+    }
+
 
     /**
      * Starts the game loop using the game container, this must have all configuration properly loaded.
      */
-    public static synchronized void start() {
-        init();
+    public synchronized void start() {
         logger.log(LogLevel.INFO, "Starting game loop.");
         new Thread(() -> {
             gameContainer.start();
@@ -49,7 +52,7 @@ public final class Game {
 
     }
 
-    private static synchronized void init() {
+    private void init() {
         logger = new ConsoleLogger(settings.isDebug());
         logger.log(LogLevel.DEBUG, "Initializing game...");
         window = new GameWindow(settings);
@@ -58,19 +61,19 @@ public final class Game {
         ExceptionLogger.logger = logger;
         logger.log(LogLevel.DEBUG, "Creating game container");
         logger.log(LogLevel.TRACE, "Using settings: " + settings.toString());
-        gameContainer = new GameContainer(logger, window, renderer, input, settings);
+        gameContainer = new GameContainer(this);
         logger.log(LogLevel.DEBUG, "Game settings loaded");
     }
 
-    public static void addScene(String key, GameScene scene) {
+    public void addScene(String key, GameScene scene) {
         gameContainer.addScene(key, scene);
     }
 
-    public static void removeScene(String key) {
+    public void removeScene(String key) {
         gameContainer.removeScene(key);
     }
 
-    public static void setScene(String key) throws MissingSceneException {
+    public void setScene(String key) throws MissingSceneException {
         gameContainer.setScene(key);
     }
 }

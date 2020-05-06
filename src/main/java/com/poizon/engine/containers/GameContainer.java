@@ -1,19 +1,10 @@
 package com.poizon.engine.containers;
 
-import com.poizon.engine.config.Settings;
+import com.poizon.engine.Game;
 import com.poizon.engine.exceptions.MissingSceneException;
-import com.poizon.engine.graphics.Font;
-import com.poizon.engine.input.GameInput;
-import com.poizon.engine.input.Input;
-import com.poizon.engine.render.IRenderer;
-import com.poizon.engine.render.Renderer;
 import com.poizon.engine.scenes.DebugScene;
 import com.poizon.engine.scenes.GameScene;
 import com.poizon.engine.scenes.ISceneManager;
-import com.poizon.engine.windows.IWindow;
-import com.poizon.engine.windows.GameWindow;
-import com.poizon.engine.utils.log.ConsoleLogger;
-import com.poizon.engine.utils.log.ILogger;
 import com.poizon.engine.utils.log.LogLevel;
 import com.poizon.engine.utils.time.Time;
 
@@ -22,7 +13,7 @@ import java.util.Map;
 
 public class GameContainer implements Runnable, IContainer, ISceneManager {
 
-    public Settings settings;
+    private Game game;
 
     private Thread thread;
 
@@ -30,36 +21,15 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     private double UPDATE_CAP;
 
-    private ILogger logger;
-
-    private IWindow window;
-
-    private IRenderer renderer;
-
-    private Input input;
-
     private String actualScene = "";
 
     private Map<String, GameScene> scenes = new HashMap<>();
 
     private DebugScene debugScene = new DebugScene();
 
-    public GameContainer() {
-        logger = new ConsoleLogger();
-        settings = new Settings();
-        window = new GameWindow(settings);
-        renderer = new Renderer(window, settings);
-        input = new GameInput(window, settings);
-        UPDATE_CAP = 1.0 / settings.getFrameRate();
-    }
-
-    public GameContainer(ILogger logger, IWindow window, IRenderer renderer, Input input, Settings settings) {
-        this.logger = logger;
-        this.settings = settings;
-        this.window = window;
-        this.renderer = renderer;
-        this.input = input;
-        UPDATE_CAP = 1.0 / settings.getFrameRate();
+    public GameContainer(Game game) {
+        this.game = game;
+        UPDATE_CAP = 1.0 / game.settings.getFrameRate();
     }
 
     private GameScene getActualScene() {
@@ -71,7 +41,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     @Override
     public void start() {
-        window.show();
+        game.window.show();
         thread = new Thread(this);
 
         thread.run();
@@ -83,7 +53,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     @Override
     public void run() {
-        logger.log("Engine running...");
+        game.logger.log("Engine running...");
         isRunning = true;
 
         boolean shouldRender = false;
@@ -97,7 +67,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         int fps = 0;
 
         while(isRunning) {
-            shouldRender = !settings.isLockFrameRate();
+            shouldRender = !game.settings.isLockFrameRate();
             firstTime = Time.now();
             passedTime = firstTime - lastTime;
             lastTime = firstTime;
@@ -111,43 +81,43 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
                 Time.deltaTime = (float)UPDATE_CAP;
 
-                if(settings.isDebug()) debugScene.update();
+                if(game.settings.isDebug()) debugScene.update(game);
 
                 GameScene scene = getActualScene();
                 if(scene != null) {
-                    scene.update();
-                    scene.updateObjects();
+                    scene.update(game);
+                    scene.updateObjects(game);
                 }
 
-                input.update();
+                game.input.update();
 
                 if(frameTime >= 1.0) {
                     frameTime = 0;
                     fps = frames;
                     frames = 0;
                     Time.fps = fps;
-                    logger.log(LogLevel.DEBUG, "FPS: " + fps);
+                    game.logger.log(LogLevel.DEBUG, "FPS: " + fps);
                 }
             }
 
             if(shouldRender) {
-                renderer.clear();
+                game.renderer.clear();
 
                 GameScene scene = getActualScene();
                 if(scene != null) {
-                    scene.render();
-                    scene.renderObjects();
+                    scene.render(game);
+                    scene.renderObjects(game);
                 }
 
-                if(settings.isDebug()) debugScene.render();
+                if(game.settings.isDebug()) debugScene.render(game);
 
-                window.update();
+                game.window.update();
                 frames++;
             } else {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    logger.log(LogLevel.ERROR, e.getMessage());
+                    game.logger.log(LogLevel.ERROR, e.getMessage());
                 }
             }
         }
@@ -162,21 +132,21 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
     @Override
     public void addScene(String key, GameScene scene) {
-        logger.log(LogLevel.TRACE, String.format("Adding scene %s.", key));
+        game.logger.log(LogLevel.TRACE, String.format("Adding scene %s.", key));
         scenes.put(key, scene);
-        logger.log(LogLevel.TRACE, String.format("Scene %s added.", key));
+        game.logger.log(LogLevel.TRACE, String.format("Scene %s added.", key));
     }
 
     @Override
         public void removeScene(String key) {
-        logger.log(LogLevel.TRACE, String.format("Removing scene %s.", key));
+        game.logger.log(LogLevel.TRACE, String.format("Removing scene %s.", key));
         scenes.remove(key);
-        logger.log(LogLevel.TRACE, String.format("Scene %s removed.", key));
+        game.logger.log(LogLevel.TRACE, String.format("Scene %s removed.", key));
     }
 
     @Override
     public void setScene(String key) throws MissingSceneException {
-        logger.log(LogLevel.TRACE, String.format("Switching scene %s.", key));
+        game.logger.log(LogLevel.TRACE, String.format("Switching scene %s.", key));
         if(scenes.get(key) == null) throw new MissingSceneException(key);
         actualScene = key;
     }

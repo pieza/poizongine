@@ -7,19 +7,28 @@ import com.poizon.engine.graphics.ImageTile;
 public abstract class GameObject {
     protected Image sprite;
     protected int positionX, positionY;
+    protected int[] spriteIndex;
     protected boolean visible;
 
     public GameObject() {
         this.positionX = 0;
         this.positionY = 0;
+        this.spriteIndex = new int[] { 0, 0 };
         this.visible = true;
     }
 
-    public void render() {
-        if(!(sprite instanceof ImageTile) && visible && sprite != null) Game.renderer.drawImage(sprite, positionX, positionY);
+    public void render(Game game) {
+        if(visible && sprite != null) {
+            if(sprite instanceof ImageTile) {
+                game.renderer.drawImageTile((ImageTile)sprite, positionX, positionY, spriteIndex[0], spriteIndex[1]);
+            } else if(sprite instanceof Image) {
+                game.renderer.drawImage(sprite, positionX, positionY);
+            }
+
+        }
     }
 
-    public void update() {
+    public void update(Game game) {
         // do nothing
     }
 
