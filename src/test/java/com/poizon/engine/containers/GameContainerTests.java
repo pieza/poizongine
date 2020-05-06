@@ -6,10 +6,4 @@ import org.junit.Assert;
 
 public class GameContainerTests {
 
-    @Test
-    public void CreateGameContainerDefaults() {
-        GameContainer game = new GameContainer();
-
-        Assert.assertNotNull(game);
-    }
 }
