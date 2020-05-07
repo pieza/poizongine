@@ -3,8 +3,10 @@ package com.poizon.engine.objects;
 import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.graphics.ImageTile;
+import com.poizon.engine.render.IRenderable;
+import com.poizon.engine.render.IUpdateable;
 
-public abstract class GameObject {
+public abstract class GameObject implements IUpdateable, IRenderable {
     protected Image sprite;
     protected int positionX, positionY;
     protected int[] spriteIndex;
@@ -17,6 +19,7 @@ public abstract class GameObject {
         this.visible = true;
     }
 
+    @Override
     public void render(Game game) {
         if(visible && sprite != null) {
             if(sprite instanceof ImageTile) {
@@ -28,6 +31,7 @@ public abstract class GameObject {
         }
     }
 
+    @Override
     public void update(Game game) {
         // do nothing
     }

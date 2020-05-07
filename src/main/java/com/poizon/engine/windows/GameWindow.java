@@ -1,5 +1,6 @@
 package com.poizon.engine.windows;
 
+import com.poizon.engine.Game;
 import com.poizon.engine.config.Settings;
 
 import javax.swing.*;
@@ -58,7 +59,7 @@ public class GameWindow implements IWindow {
     }
 
     @Override
-    public void update() {
+    public void update(Game game) {
         graphics.drawImage(image,0, 0, canvas.getWidth(), canvas.getHeight(), null);
         bufferStrategy.show();
     }

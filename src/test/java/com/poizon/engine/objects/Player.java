@@ -2,6 +2,7 @@ package com.poizon.engine.objects;
 
 import com.poizon.engine.Game;
 import com.poizon.engine.audio.SoundClip;
+import com.poizon.engine.camera.Camera;
 import com.poizon.engine.graphics.ImageTile;
 
 import java.awt.event.KeyEvent;
@@ -22,10 +23,12 @@ public class Player extends GameObject {
 
         if(game.input.isKey(KeyEvent.VK_D)) {
             positionX += velocity;
+            game.camera = new Camera(velocity, 0);
         }
 
         if(game.input.isKey(KeyEvent.VK_A)) {
             positionX -= velocity;
+            game.camera = new Camera(-velocity, 0);
         }
 
         if(game.input.isKey(KeyEvent.VK_W)) {

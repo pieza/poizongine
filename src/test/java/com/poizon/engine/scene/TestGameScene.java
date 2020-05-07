@@ -11,6 +11,7 @@ public class TestGameScene extends GameScene {
     public TestGameScene() {
         background = new Image("/sprites/world.png");
         objects.put("PLAYER", new Player());
+
     }
 
     @Override

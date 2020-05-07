@@ -3,6 +3,7 @@ package com.poizon.engine.graphics;
 import com.poizon.engine.exceptions.ExceptionLogger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -18,8 +19,6 @@ public class Image {
     private int lightBlock = Light.NONE;
 
     public Image(String path) {
-        BufferedImage image = null;
-
         try {
             image = ImageIO.read(Image.class.getResourceAsStream(path));
         } catch (IOException e) {

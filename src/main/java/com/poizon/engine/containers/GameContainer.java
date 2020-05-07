@@ -32,7 +32,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         UPDATE_CAP = 1.0 / game.settings.getFrameRate();
     }
 
-    private GameScene getActualScene() {
+    public GameScene getActualScene() {
         if( actualScene != null && !actualScene.isEmpty() && scenes.get(actualScene) != null)
             return scenes.get(actualScene);
 

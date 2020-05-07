@@ -1,5 +1,7 @@
 package com.poizon.engine.windows;
 
+import com.poizon.engine.render.IUpdateable;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -8,11 +10,9 @@ import java.awt.image.BufferedImage;
  *
  * @author Jose Ulloa
  */
-public interface IWindow {
+public interface IWindow extends IUpdateable {
 
     void show();
-
-    void update();
 
     BufferedImage getImage();
 
