@@ -15,9 +15,11 @@ import java.awt.image.DataBufferInt;
 public class Renderer implements IRenderer {
     private int pixelWidth;
     private int pixelHeight;
+    private int zDepth;
     private int[] pixels;
     private int[] zBuffer;
-    private int zDepth;
+    private int[] lightMap;
+    private int[] lightBlock;
 
     public Renderer(IWindow window, Settings settings) {
         pixelWidth = settings.getScreenWidth();
@@ -25,6 +27,18 @@ public class Renderer implements IRenderer {
 
         pixels = ((DataBufferInt)window.getImage().getRaster().getDataBuffer()).getData();
         zBuffer = new int[pixels.length];
+        lightMap = new int[pixels.length];
+        lightBlock = new int[pixels.length];
+    }
+
+    private void process() {
+        for (int i = 0; i < pixels.length; i++) {
+            float red = ((lightMap[i] >> 16) & 0xff) / 255f;
+            float green = ((lightMap[i] >> 8) & 0xff) / 255f;
+            float blue = (lightMap[i] & 0xff) / 255f;
+
+            pixels[i] =  ((int)(((pixels[i] >> 16) & 0xff) * red) << 16 | (int)(((pixels[i] >> 8) & 0xff) * green) << 8 | (int)((pixels[i] & 0xff) * blue));
+        }
     }
 
     private void setPixel(int x, int y, int value) {
@@ -42,14 +56,29 @@ public class Renderer implements IRenderer {
             pixels[x + y * pixelWidth] = value;
         } else {
             int pixelColor =  pixels[x + y * pixelWidth];
-            int newRed = (((pixelColor >> 16) & 0xff) - (int)(((pixelColor >> 16) & 0xff - (value >> 16) & 0xff) * alpha/255f));
-            int newGreen = (((pixelColor >> 8) & 0xff) - (int)(((pixelColor >> 8) & 0xff - (value >> 8) & 0xff) * alpha/255f));
-            int newBlue = (((pixelColor) & 0xff) - (int)(((pixelColor) & 0xff - (value) & 0xff) * alpha/255f));
+            int newRed = ((pixelColor >> 16) & 0xff) - (int)((((pixelColor >> 16) & 0xff) - ((value >> 16) & 0xff)) * (alpha/255f));
+            int newGreen = ((pixelColor >> 8) & 0xff) - (int)((((pixelColor >> 8) & 0xff) - ((value >> 8) & 0xff)) * (alpha/255f));
+            int newBlue = (pixelColor & 0xff) - (int)(((pixelColor) & 0xff - (value & 0xff)) * (alpha/255f));
 
-            pixels[x + y * pixelWidth] = (255 << 24 | newRed << 16 | newGreen << 8 | newBlue);
+            pixels[x + y * pixelWidth] = (newRed << 16 | newGreen << 8 | newBlue);
         }
 
 
+    }
+
+    private void setLightMap(int x, int y, int value) {
+        if(x < 0 || x >= pixelWidth || y < 0 || y>= pixelWidth) {
+            return;
+        }
+
+        int baseColor = lightMap[x + y * pixelWidth];
+        int finalColor = 0;
+
+        int maxRed = Math.max((baseColor >> 16) & 0xff,  (value >> 16) & 0xff);
+        int maxGreen = Math.max((baseColor >> 8) & 0xff,  (value >> 16) & 0xff);
+        int maxBlue = Math.max((baseColor) & 0xff,  (value) & 0xff);
+
+        lightMap[x + y * pixelWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
     }
 
     @Override
