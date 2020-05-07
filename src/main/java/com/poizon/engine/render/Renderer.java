@@ -16,26 +16,47 @@ public class Renderer implements IRenderer {
     private int pixelWidth;
     private int pixelHeight;
     private int[] pixels;
+    private int[] zBuffer;
+    private int zDepth;
 
     public Renderer(IWindow window, Settings settings) {
         pixelWidth = settings.getScreenWidth();
         pixelHeight = settings.getScreenHeight();
 
         pixels = ((DataBufferInt)window.getImage().getRaster().getDataBuffer()).getData();
+        zBuffer = new int[pixels.length];
     }
 
     private void setPixel(int x, int y, int value) {
-        if((x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) || ((value >> 24) & 0xff) == 0) {
+        int alpha = ((value >> 24) & 0xff);
+
+        if((x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) || alpha == 0) {
             return;
         }
 
-        pixels[x + y * pixelWidth] = value;
+        if(zBuffer[x + y * pixelWidth] > zDepth) {
+            return;
+        }
+
+        if(alpha == 255) {
+            pixels[x + y * pixelWidth] = value;
+        } else {
+            int pixelColor =  pixels[x + y * pixelWidth];
+            int newRed = (((pixelColor >> 16) & 0xff) - (int)(((pixelColor >> 16) & 0xff - (value >> 16) & 0xff) * alpha/255f));
+            int newGreen = (((pixelColor >> 8) & 0xff) - (int)(((pixelColor >> 8) & 0xff - (value >> 8) & 0xff) * alpha/255f));
+            int newBlue = (((pixelColor) & 0xff) - (int)(((pixelColor) & 0xff - (value) & 0xff) * alpha/255f));
+
+            pixels[x + y * pixelWidth] = (255 << 24 | newRed << 16 | newGreen << 8 | newBlue);
+        }
+
+
     }
 
     @Override
     public void clear(){
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = 0;
+            zBuffer[i] = 0;
         }
     }
 
