@@ -11,7 +11,7 @@ public class Player extends GameObject {
     int velocity = 2;
 
     public Player() {
-        sprite = new ImageTile("/sprites/player.png", 19, 21);
+        sprite = new ImageTile("/sprites/player.png", 60, 60);
     }
 
     @Override
