@@ -15,6 +15,18 @@ public class ImageTile extends Image {
         this.tileHeight = tileHeight;
     }
 
+    public Image getTileImage(int tileX, int tileY) {
+        int[] pixels = new int[tileWidth * tileHeight];
+
+        for (int y = 0; y < tileHeight; y++) {
+            for (int x = 0; x < tileWidth; x++) {
+                pixels[x + y * tileWidth] = this.getPixels()[(x + tileX * tileWidth) + (y + tileY * tileHeight) * getWidth()];
+            }
+        }
+
+        return new Image(pixels, tileWidth, tileHeight);
+    }
+
     public int getTileWidth() {
         return tileWidth;
     }

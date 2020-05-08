@@ -102,15 +102,13 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
             if(shouldRender) {
                 game.renderer.clear();
-
                 GameScene scene = getActualScene();
                 if(scene != null) {
                     scene.render(game);
                     scene.renderObjects(game);
                 }
-
+                game.renderer.process();
                 if(game.settings.isDebug()) debugScene.render(game);
-
                 game.window.update();
                 frames++;
             } else {

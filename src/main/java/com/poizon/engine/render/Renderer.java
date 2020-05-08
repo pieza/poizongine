@@ -1,13 +1,14 @@
 package com.poizon.engine.render;
 
 import com.poizon.engine.config.Settings;
-import com.poizon.engine.graphics.Color;
-import com.poizon.engine.graphics.Font;
-import com.poizon.engine.graphics.Image;
-import com.poizon.engine.graphics.ImageTile;
+import com.poizon.engine.graphics.*;
 import com.poizon.engine.windows.IWindow;
 
 import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Jose Ulloa
@@ -15,9 +16,15 @@ import java.awt.image.DataBufferInt;
 public class Renderer implements IRenderer {
     private int pixelWidth;
     private int pixelHeight;
+    private int zDepth;
+    private int ambientColor = Color.AMBIENT;
     private int[] pixels;
     private int[] zBuffer;
-    private int zDepth;
+    private int[] lightMap;
+    private int[] lightBlock;
+    private boolean processing = false;
+    private ArrayList<ImageRequest> imageRequests = new ArrayList<>();
+    private ArrayList<LightRequest> lightRequests = new ArrayList<>();
 
     public Renderer(IWindow window, Settings settings) {
         pixelWidth = settings.getScreenWidth();
@@ -25,6 +32,8 @@ public class Renderer implements IRenderer {
 
         pixels = ((DataBufferInt)window.getImage().getRaster().getDataBuffer()).getData();
         zBuffer = new int[pixels.length];
+        lightMap = new int[pixels.length];
+        lightBlock = new int[pixels.length];
     }
 
     private void setPixel(int x, int y, int value) {
@@ -33,23 +42,147 @@ public class Renderer implements IRenderer {
         if((x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) || alpha == 0) {
             return;
         }
+        int index = x + y * pixelWidth;
+
+        if(zBuffer[index] > zDepth) {
+            return;
+        }
+
+        zBuffer[index] = zDepth;
+
+        if(alpha == 255) {
+            pixels[index] = value;
+        } else {
+            int pixelColor =  pixels[index];
+            int newRed = ((pixelColor >> 16) & 0xff) - (int)((((pixelColor >> 16) & 0xff) - ((value >> 16) & 0xff)) * (alpha/255f));
+            int newGreen = ((pixelColor >> 8) & 0xff) - (int)((((pixelColor >> 8) & 0xff) - ((value >> 8) & 0xff)) * (alpha/255f));
+            int newBlue = (pixelColor & 0xff) - (int)(((pixelColor) & 0xff - (value & 0xff)) * (alpha/255f));
+
+            pixels[index] = (newRed << 16 | newGreen << 8 | newBlue);
+        }
+
+
+    }
+
+    private void drawLightLine(Light light, int x0, int y0, int x1, int y1, int offX, int offY) {
+        int dx = Math.abs(x1 - x0);
+        int dy = Math.abs(y1 - y0);
+
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
+
+        int err = dx -dy;
+        int e2;
+        
+        while (true) {
+            int screenX = x0 - light.getRadius() + offX;
+            int screenY = y0 - light.getRadius() + offY;
+
+            if(screenX < 0 || screenY >= pixelWidth || screenY < 0 || screenY >= pixelHeight){
+                return;
+            }
+
+            int lightColor = light.getLightValue(x0, y0);
+            if(lightColor == 0)
+                return;
+
+            if(lightBlock[screenX + screenY * pixelWidth] == Light.FULL) {
+                return;
+            }
+
+            setLightMap(screenX, screenY, lightColor);
+
+            if(x0 == x1 && y0 == y1) {
+                break;
+            }
+
+            e2 = 2 * err;
+
+            if(e2 > -1 * dy) {
+                err -= dy;
+                x0 += sx;
+            }
+
+            if(e2 < dx) {
+                err += dx;
+                y0 += sy;
+            }
+
+        }
+    }
+
+    @Override
+    public void process() {
+        processing = true;
+
+        Collections.sort(imageRequests, (i0, i1) -> {
+            if(i0.zDepth < i1.zDepth)
+                return -1;
+            if(i0.zDepth > i1.zDepth)
+                return 1;
+            return 0;
+        });
+
+        for (int i = 0; i < imageRequests.size(); i++) {
+            ImageRequest imageRequest = imageRequests.get(i);
+            zDepth = imageRequest.zDepth;
+            imageRequest.image.setAlpha(false);
+            drawImage(imageRequest.image, imageRequest.offX, imageRequest.offY);
+        }
+
+
+
+        for (int i = 0; i < lightRequests.size(); i++) {
+            LightRequest lightRequest = lightRequests.get(i);
+            drawLightRequest(lightRequest.light, lightRequest.locationX, lightRequest.locationY);
+        }
+
+        for (int i = 0; i < pixels.length; i++) {
+            float red = ((lightMap[i] >> 16) & 0xff) / 255f;
+            float green = ((lightMap[i] >> 8) & 0xff) / 255f;
+            float blue = (lightMap[i] & 0xff) / 255f;
+
+            pixels[i] =  ((int)(((pixels[i] >> 16) & 0xff) * red) << 16 | (int)(((pixels[i] >> 8) & 0xff) * green) << 8 | (int)((pixels[i] & 0xff) * blue));
+        }
+
+        imageRequests.clear();
+        lightRequests.clear();
+        processing = false;
+    }
+
+    private void setLightMap(int x, int y, int value) {
+        if(x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) {
+            return;
+        }
 
         if(zBuffer[x + y * pixelWidth] > zDepth) {
             return;
         }
 
-        if(alpha == 255) {
-            pixels[x + y * pixelWidth] = value;
-        } else {
-            int pixelColor =  pixels[x + y * pixelWidth];
-            int newRed = (((pixelColor >> 16) & 0xff) - (int)(((pixelColor >> 16) & 0xff - (value >> 16) & 0xff) * alpha/255f));
-            int newGreen = (((pixelColor >> 8) & 0xff) - (int)(((pixelColor >> 8) & 0xff - (value >> 8) & 0xff) * alpha/255f));
-            int newBlue = (((pixelColor) & 0xff) - (int)(((pixelColor) & 0xff - (value) & 0xff) * alpha/255f));
+        int baseColor = lightMap[x + y * pixelWidth];
 
-            pixels[x + y * pixelWidth] = (255 << 24 | newRed << 16 | newGreen << 8 | newBlue);
+        int maxRed = Math.max((baseColor >> 16) & 0xff,  (value >> 16) & 0xff);
+        int maxGreen = Math.max((baseColor >> 8) & 0xff,  (value >> 16) & 0xff);
+        int maxBlue = Math.max(baseColor & 0xff, value & 0xff);
+
+        lightMap[x + y * pixelWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
+    }
+
+    private void setLightBlock(int x, int y, int value) {
+        if(x < 0 || x >= pixelWidth || y < 0 || y >= pixelHeight) {
+            return;
         }
 
+        lightBlock[x + y * pixelWidth] = value;
+    }
 
+    private void drawLightRequest(Light light, int offX, int offY) {
+        for (int i = 0; i < light.getDiameter(); i++) {
+            drawLightLine(light, light.getRadius(), light.getRadius(), i, 0, offX, offY);
+            drawLightLine(light, light.getRadius(), light.getRadius(), i, light.getDiameter(), offX, offY);
+            drawLightLine(light, light.getRadius(), light.getRadius(),0, i, offX, offY);
+            drawLightLine(light, light.getRadius(), light.getRadius(), light.getDiameter(), i, offX, offY);
+        }
     }
 
     @Override
@@ -57,11 +190,18 @@ public class Renderer implements IRenderer {
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = 0;
             zBuffer[i] = 0;
+            lightMap[i] = ambientColor;
+            lightBlock[i] = 0;
         }
     }
 
     @Override
     public void drawImage(Image image, int offX, int offY) {
+        if(image.isAlpha() && !processing) {
+            imageRequests.add(new ImageRequest(image, zDepth, offX, offY));
+            return;
+        }
+
         // do not render if
         if(offX < -image.getWidth()) return;
         if(offY < -image.getHeight()) return;
@@ -81,12 +221,18 @@ public class Renderer implements IRenderer {
         for (int y = newY; y < newHeight; y++) {
             for (int x = newX; x < newWidth; x++) {
                 setPixel(x + offX, y + offY, image.getPixels()[x + y * image.getWidth()]);
+                setLightBlock(x + offX, y + offY, image.getLightBlock());
             }
         }
     }
 
     @Override
     public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY ) {
+        if(image.isAlpha() && !processing) {
+            imageRequests.add(new ImageRequest(image.getTileImage(tileX, tileY), zDepth, offX, offY));
+            return;
+        }
+
         // do not render if
         if(offX < -image.getTileWidth()) return;
         if(offY < -image.getTileHeight()) return;
@@ -106,6 +252,7 @@ public class Renderer implements IRenderer {
         for (int y = newY; y < newHeight; y++) {
             for (int x = newX; x < newWidth; x++) {
                 setPixel(x + offX, y + offY, image.getPixels()[(x + tileX * image.getTileWidth()) + (y + tileY * image.getTileHeight()) * image.getWidth()]);
+                setLightBlock(x + offX, y + offY, image.getLightBlock());
             }
         }
     }
@@ -128,5 +275,10 @@ public class Renderer implements IRenderer {
 
             offset += font.getWidths()[unicode];
         }
+    }
+
+    @Override
+    public void drawLight(Light light, int offX, int offY) {
+        lightRequests.add(new LightRequest(light, offX, offY));
     }
 }

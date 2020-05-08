@@ -14,6 +14,8 @@ import java.io.IOException;
 public class Image {
     private int width, height;
     private int[] pixels;
+    private boolean alpha = false;
+    private int lightBlock = Light.NONE;
 
     public Image(String path) {
         BufferedImage image = null;
@@ -29,6 +31,12 @@ public class Image {
         pixels = image.getRGB(0, 0, width, height, null, 0, width);
     }
 
+    public Image(int[] pixels, int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.pixels = pixels;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -39,5 +47,22 @@ public class Image {
 
     public int[] getPixels() {
         return pixels;
+    }
+
+    public int getLightBlock() {
+        return lightBlock;
+    }
+
+    public void setLightBlock(int lightBlock) {
+        this.lightBlock = lightBlock;
+    }
+
+
+    public boolean isAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(boolean alpha) {
+        this.alpha = alpha;
     }
 }
