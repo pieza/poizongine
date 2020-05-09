@@ -115,6 +115,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                     camera.render(game);
                 }
 
+
                 GameScene scene = getActualScene();
                 if(scene != null) {
                     scene.render(game);
@@ -126,6 +127,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 // reset camera position to draw thinks out of camera, like GUI, debug.
                 game.renderer.setCameraX(0);
                 game.renderer.setCameraY(0);
+
                 if(game.settings.isDebug()) debugScene.render(game);
                 // TODO: overlay layer
                 game.window.update(game, deltaTime);

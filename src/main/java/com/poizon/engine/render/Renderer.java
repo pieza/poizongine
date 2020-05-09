@@ -200,13 +200,13 @@ public class Renderer implements IRenderer {
 
     @Override
     public void drawImage(Image image, int offX, int offY) {
-        offX -= cameraX;
-        offY -= cameraY;
-
         if(image.isAlpha() && !processing) {
             imageRequests.add(new ImageRequest(image, zDepth, offX, offY));
             return;
         }
+
+        offX -= cameraX;
+        offY -= cameraY;
 
         // do not render if
         if(offX < -image.getWidth()) return;
@@ -233,14 +233,14 @@ public class Renderer implements IRenderer {
     }
 
     @Override
-    public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY ) {
-        offX -= cameraX;
-        offY -= cameraY;
-
+    public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY) {
         if(image.isAlpha() && !processing) {
             imageRequests.add(new ImageRequest(image.getTileImage(tileX, tileY), zDepth, offX, offY));
             return;
         }
+
+        offX -= cameraX;
+        offY -= cameraY;
 
         // do not render if
         if(offX < -image.getTileWidth()) return;
