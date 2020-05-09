@@ -7,6 +7,7 @@ import com.poizon.engine.exceptions.ExceptionLogger;
 import com.poizon.engine.exceptions.MissingSceneException;
 import com.poizon.engine.input.GameInput;
 import com.poizon.engine.input.Input;
+import com.poizon.engine.objects.GameObject;
 import com.poizon.engine.render.IRenderer;
 import com.poizon.engine.render.Renderer;
 import com.poizon.engine.scenes.GameScene;
@@ -80,7 +81,11 @@ public final class Game {
         gameContainer.setScene(key);
     }
 
-    public void getActualScene() {
-        gameContainer.getActualScene();
+    public GameScene getActualScene() {
+        return gameContainer.getActualScene();
+    }
+
+    public GameObject getObject(String key) {
+        return gameContainer.getActualScene().objects.get(key);
     }
 }

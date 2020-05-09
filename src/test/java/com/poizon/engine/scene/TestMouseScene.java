@@ -12,12 +12,17 @@ public class TestMouseScene extends GameScene {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
 
     }
 
     @Override
     public void render(Game game) {
         game.renderer.drawImage(image, game.input.getMouseX()-image.getWidth()/2, game.input.getMouseY()-image.getHeight()/2);
+    }
+
+    @Override
+    public void init(Game game) {
+
     }
 }

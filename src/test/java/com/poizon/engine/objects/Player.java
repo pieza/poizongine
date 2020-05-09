@@ -16,19 +16,17 @@ public class Player extends GameObject {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
         if(game.input.isKeyDown(KeyEvent.VK_SPACE)) {
             sound.play();
         }
 
         if(game.input.isKey(KeyEvent.VK_D)) {
             positionX += velocity;
-            game.camera = new Camera(velocity, 0);
         }
 
         if(game.input.isKey(KeyEvent.VK_A)) {
             positionX -= velocity;
-            game.camera = new Camera(-velocity, 0);
         }
 
         if(game.input.isKey(KeyEvent.VK_W)) {

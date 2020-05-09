@@ -3,12 +3,14 @@ package com.poizon.engine.objects;
 import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.graphics.ImageTile;
+import com.poizon.engine.render.IInitializable;
 import com.poizon.engine.render.IRenderable;
 import com.poizon.engine.render.IUpdateable;
 
-public abstract class GameObject implements IUpdateable, IRenderable {
+public abstract class GameObject implements IInitializable, IUpdateable, IRenderable {
     protected Image sprite;
     protected int positionX, positionY;
+    protected int width, height;
     protected int[] spriteIndex;
     protected boolean visible;
 
@@ -17,6 +19,11 @@ public abstract class GameObject implements IUpdateable, IRenderable {
         this.positionY = 0;
         this.spriteIndex = new int[] { 0, 0 };
         this.visible = true;
+    }
+
+    @Override
+    public void init(Game game) {
+
     }
 
     @Override
@@ -32,7 +39,7 @@ public abstract class GameObject implements IUpdateable, IRenderable {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
         // do nothing
     }
 
@@ -58,5 +65,21 @@ public abstract class GameObject implements IUpdateable, IRenderable {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

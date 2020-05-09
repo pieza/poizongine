@@ -59,7 +59,7 @@ public class GameWindow implements IWindow {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
         graphics.drawImage(image,0, 0, canvas.getWidth(), canvas.getHeight(), null);
         bufferStrategy.show();
     }

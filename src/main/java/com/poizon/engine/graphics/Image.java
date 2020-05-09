@@ -17,6 +17,7 @@ public class Image {
     private int[] pixels;
     private boolean alpha = false;
     private int lightBlock = Light.NONE;
+    private BufferedImage image;
 
     public Image(String path) {
         try {

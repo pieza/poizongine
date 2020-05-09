@@ -1,6 +1,7 @@
 package com.poizon.engine.containers;
 
 import com.poizon.engine.Game;
+import com.poizon.engine.camera.Camera;
 import com.poizon.engine.exceptions.MissingSceneException;
 import com.poizon.engine.scenes.DebugScene;
 import com.poizon.engine.scenes.GameScene;
@@ -65,6 +66,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         double frameTime = 0;
         int frames = 0;
         int fps = 0;
+        float deltaTime = 0;
 
         while(isRunning) {
             shouldRender = !game.settings.isLockFrameRate();
@@ -79,14 +81,19 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 unprocessedTime -= UPDATE_CAP;
                 shouldRender = true;
 
-                float deltaTime = (float)UPDATE_CAP;
+                deltaTime = (float)UPDATE_CAP;
 
-                if(game.settings.isDebug()) debugScene.update(game);
+                if(game.settings.isDebug()) debugScene.update(game, deltaTime);
 
                 GameScene scene = getActualScene();
                 if(scene != null) {
-                    scene.update(game);
-                    scene.updateObjects(game);
+                    scene.update(game, deltaTime);
+                    scene.updateObjects(game, deltaTime);
+                }
+
+                Camera camera = game.camera;
+                if(camera != null) {
+                    camera.update(game, deltaTime);
                 }
 
                 game.input.update();
@@ -102,14 +109,26 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
 
             if(shouldRender) {
                 game.renderer.clear();
+
+                Camera camera = game.camera;
+                if(camera != null) {
+                    camera.render(game);
+                }
+
                 GameScene scene = getActualScene();
                 if(scene != null) {
                     scene.render(game);
                     scene.renderObjects(game);
                 }
+
                 game.renderer.process();
+
+                // reset camera position to draw thinks out of camera, like GUI, debug.
+                game.renderer.setCameraX(0);
+                game.renderer.setCameraY(0);
                 if(game.settings.isDebug()) debugScene.render(game);
-                game.window.update();
+                // TODO: overlay layer
+                game.window.update(game, deltaTime);
                 frames++;
             } else {
                 try {
@@ -145,7 +164,10 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
     @Override
     public void setScene(String key) throws MissingSceneException {
         game.logger.log(LogLevel.TRACE, String.format("Switching scene %s.", key));
-        if(scenes.get(key) == null) throw new MissingSceneException(key);
+        GameScene scene = scenes.get(key);
+        if(scene == null) throw new MissingSceneException(key);
+        game.logger.log(LogLevel.TRACE, String.format("Initializing scene %s.", key));
+        scene.init(game);
         actualScene = key;
     }
 }
