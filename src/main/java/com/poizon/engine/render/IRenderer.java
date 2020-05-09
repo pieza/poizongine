@@ -12,12 +12,18 @@ import com.poizon.engine.graphics.Light;
  */
 public interface  IRenderer {
     /**
+     * After rendering method for loading images, light in depth order.
+     */
+    void process();
+
+    /**
      * Clears pixels in the screen or window.
      */
     void clear();
 
     /**
      * Draws an image on the screen or window.
+     *
      * @param image Image to draw.
      * @param offX Position x.
      * @param offY Position y.
@@ -26,6 +32,7 @@ public interface  IRenderer {
 
     /**
      * Draws an image on the screen or window.
+     *
      * @param image Image to draw.
      * @param offX Position x.
      * @param offY Position y.
@@ -34,6 +41,7 @@ public interface  IRenderer {
 
     /**
      * Draws a text on the screen or window.
+     *
      * @param text Text wanted to be draw.
      * @param offX Position x.
      * @param offY Position y.
@@ -42,7 +50,20 @@ public interface  IRenderer {
      */
     void drawText(String text, Font font, int offX, int offY, int color);
 
+    /**
+     * Draws a light on the screen or window.
+     *
+     * @param light Light object to be draw.
+     * @param offX Position x.
+     * @param offY Position y.
+     */
     void drawLight(Light light, int offX, int offY);
 
-    void process();
+    /**
+     * Define the ambient light, default white.
+     *
+     * @param color Color in hexadecimal.
+     * @see com.poizon.engine.graphics.Color
+     */
+    void setAmbientLight(int color);
 }

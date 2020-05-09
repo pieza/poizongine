@@ -13,7 +13,7 @@ public class TestLightScene extends GameScene {
 
     public TestLightScene() {
         image = new Image("/sprites/hidden.png");
-        //image.setLightBlock(Light.FULL);
+        image.setLightBlock(Light.FULL);
         background = new Image("/sprites/bg.png");
         light = new Light(50, Color.CYAN);
     }

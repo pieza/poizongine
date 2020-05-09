@@ -16,7 +16,7 @@ public class EnginePlayground {
 
         game.start();
         try {
-            game.setScene("LIGHT");
+            game.setScene("TEST");
         } catch (MissingSceneException e) {
             e.printStackTrace();
         }

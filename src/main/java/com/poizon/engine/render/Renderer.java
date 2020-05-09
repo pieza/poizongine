@@ -6,9 +6,7 @@ import com.poizon.engine.windows.IWindow;
 
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * @author Jose Ulloa
@@ -17,7 +15,7 @@ public class Renderer implements IRenderer {
     private int pixelWidth;
     private int pixelHeight;
     private int zDepth;
-    private int ambientColor = Color.AMBIENT;
+    private int ambientLight = Color.WHITE;
     private int[] pixels;
     private int[] zBuffer;
     private int[] lightMap;
@@ -190,7 +188,7 @@ public class Renderer implements IRenderer {
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = 0;
             zBuffer[i] = 0;
-            lightMap[i] = ambientColor;
+            lightMap[i] = ambientLight;
             lightBlock[i] = 0;
         }
     }
@@ -280,5 +278,10 @@ public class Renderer implements IRenderer {
     @Override
     public void drawLight(Light light, int offX, int offY) {
         lightRequests.add(new LightRequest(light, offX, offY));
+    }
+
+    @Override
+    public void setAmbientLight(int color) {
+        this.ambientLight = color;
     }
 }
