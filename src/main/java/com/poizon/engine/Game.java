@@ -1,11 +1,13 @@
 package com.poizon.engine;
 
+import com.poizon.engine.camera.Camera;
 import com.poizon.engine.config.Settings;
 import com.poizon.engine.containers.GameContainer;
 import com.poizon.engine.exceptions.ExceptionLogger;
 import com.poizon.engine.exceptions.MissingSceneException;
 import com.poizon.engine.input.GameInput;
 import com.poizon.engine.input.Input;
+import com.poizon.engine.objects.GameObject;
 import com.poizon.engine.render.IRenderer;
 import com.poizon.engine.render.Renderer;
 import com.poizon.engine.scenes.GameScene;
@@ -28,6 +30,7 @@ public final class Game {
     public IRenderer renderer;
     public Input input;
     public Settings settings;
+    public Camera camera;
 
     public Game() {
         // load defaults settings
@@ -63,6 +66,7 @@ public final class Game {
         logger.log(LogLevel.TRACE, "Using settings: " + settings.toString());
         gameContainer = new GameContainer(this);
         logger.log(LogLevel.DEBUG, "Game settings loaded");
+        camera = new Camera();
     }
 
     public void addScene(String key, GameScene scene) {
@@ -75,5 +79,13 @@ public final class Game {
 
     public void setScene(String key) throws MissingSceneException {
         gameContainer.setScene(key);
+    }
+
+    public GameScene getActualScene() {
+        return gameContainer.getActualScene();
+    }
+
+    public GameObject getObject(String key) {
+        return gameContainer.getActualScene().objects.get(key);
     }
 }

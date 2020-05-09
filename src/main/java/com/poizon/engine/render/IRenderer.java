@@ -66,4 +66,8 @@ public interface  IRenderer {
      * @see com.poizon.engine.graphics.Color
      */
     void setAmbientLight(int color);
+
+    void setCameraX(int offX);
+
+    void setCameraY(int offY);
 }

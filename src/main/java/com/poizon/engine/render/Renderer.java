@@ -15,6 +15,8 @@ public class Renderer implements IRenderer {
     private int pixelWidth;
     private int pixelHeight;
     private int zDepth;
+    private int cameraX;
+    private int cameraY;
     private int ambientLight = Color.WHITE;
     private int[] pixels;
     private int[] zBuffer;
@@ -175,6 +177,9 @@ public class Renderer implements IRenderer {
     }
 
     private void drawLightRequest(Light light, int offX, int offY) {
+        offX -= cameraX;
+        offY -= cameraY;
+
         for (int i = 0; i < light.getDiameter(); i++) {
             drawLightLine(light, light.getRadius(), light.getRadius(), i, 0, offX, offY);
             drawLightLine(light, light.getRadius(), light.getRadius(), i, light.getDiameter(), offX, offY);
@@ -195,6 +200,9 @@ public class Renderer implements IRenderer {
 
     @Override
     public void drawImage(Image image, int offX, int offY) {
+        offX -= cameraX;
+        offY -= cameraY;
+
         if(image.isAlpha() && !processing) {
             imageRequests.add(new ImageRequest(image, zDepth, offX, offY));
             return;
@@ -226,6 +234,9 @@ public class Renderer implements IRenderer {
 
     @Override
     public void drawImageTile(ImageTile image, int offX, int offY, int tileX, int tileY ) {
+        offX -= cameraX;
+        offY -= cameraY;
+
         if(image.isAlpha() && !processing) {
             imageRequests.add(new ImageRequest(image.getTileImage(tileX, tileY), zDepth, offX, offY));
             return;
@@ -257,6 +268,9 @@ public class Renderer implements IRenderer {
 
     @Override
     public void drawText(String text, Font font, int offX, int offY, int color) {
+        offX -= cameraX;
+        offY -= cameraY;
+
         text = text.toUpperCase();
         int offset = 0;
 
@@ -283,5 +297,15 @@ public class Renderer implements IRenderer {
     @Override
     public void setAmbientLight(int color) {
         this.ambientLight = color;
+    }
+
+    @Override
+    public void setCameraX(int offX) {
+        this.cameraX = offX;
+    }
+
+    @Override
+    public void setCameraY(int offY) {
+        this.cameraY = offY;
     }
 }

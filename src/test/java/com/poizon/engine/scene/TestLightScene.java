@@ -19,7 +19,7 @@ public class TestLightScene extends GameScene {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
 
     }
 
@@ -28,5 +28,10 @@ public class TestLightScene extends GameScene {
         game.renderer.drawImage(background, 0, 0);
         game.renderer.drawImage(image, 50, 70);
         game.renderer.drawLight(light, game.input.getMouseX(), game.input.getMouseY());
+    }
+
+    @Override
+    public void init(Game game) {
+
     }
 }

@@ -2,6 +2,7 @@ package com.poizon.engine.objects;
 
 import com.poizon.engine.Game;
 import com.poizon.engine.audio.SoundClip;
+import com.poizon.engine.camera.Camera;
 import com.poizon.engine.graphics.ImageTile;
 
 import java.awt.event.KeyEvent;
@@ -15,7 +16,7 @@ public class Player extends GameObject {
     }
 
     @Override
-    public void update(Game game) {
+    public void update(Game game, float deltaTime) {
         if(game.input.isKeyDown(KeyEvent.VK_SPACE)) {
             sound.play();
         }
