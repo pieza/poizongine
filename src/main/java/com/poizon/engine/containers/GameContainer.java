@@ -79,7 +79,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 unprocessedTime -= UPDATE_CAP;
                 shouldRender = true;
 
-                Time.deltaTime = (float)UPDATE_CAP;
+                float deltaTime = (float)UPDATE_CAP;
 
                 if(game.settings.isDebug()) debugScene.update(game);
 

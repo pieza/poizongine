@@ -15,7 +15,5 @@ public class Time  {
         return formatter.format(date);
     }
 
-    public static float deltaTime = 0;
-
     public static float fps = 0;
 }
