@@ -13,14 +13,14 @@ COMMING SOON
 ## Getting started
 
 ### Initialize game
-```
+```java
 // run game with default settings
 Game game = new Game();
 game.start();
 ```
 
 ### Setting up game
-```
+```java
 Game game = new Game();
 game.settings.setDebug(true);
 game.settings.setScale(4f);
@@ -30,14 +30,14 @@ game.settings.setFullScreen(false);
 game.start();
 ```
 Optional using Settings class:
-```
+```java
 Game game = new Game(new Settings(800, 400, 60, 4f, false, false, false));
 game.start();
 ```
 ## Scenes
 
 ### Creating scenes
-```
+```java
 import com.poizon.engine.Game;
 import com.poizon.engine.scenes.GameScene;
 
@@ -66,19 +66,19 @@ game.addScene("WORLD", new WorldScene());
 ```
 
 ### Selecting scene
-```
+```java
 game.setScene("TEST");
 ```
 
 ### Selecting scene
-```
+```java
 game.setScene("TEST");
 ```
 
 ## Game Objects
 
 ### Creating game object
-```
+```java
 import com.poizon.engine.Game;
 import com.poizon.engine.audio.SoundClip;
 import com.poizon.engine.graphics.ImageTile;
