@@ -15,7 +15,7 @@ public class TestLightScene extends GameScene {
         image = new Image("/sprites/hidden.png");
         image.setLightBlock(Light.FULL);
         background = new Image("/sprites/bg.png");
-        light = new Light(50, Color.CYAN);
+        light = new Light(50, Color.WHITE);
     }
 
     @Override
@@ -32,6 +32,6 @@ public class TestLightScene extends GameScene {
 
     @Override
     public void init(Game game) {
-
+        game.renderer.setAmbientLight(Color.DARK_GREY);
     }
 }

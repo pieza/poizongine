@@ -59,6 +59,10 @@ public interface  IRenderer {
      */
     void drawLight(Light light, int offX, int offY);
 
+    void drawRect(int x, int y, int width, int height, int color);
+
+    void drawFillRect(int x, int y, int width, int height, int color);
+
     /**
      * Define the ambient light, default white.
      *

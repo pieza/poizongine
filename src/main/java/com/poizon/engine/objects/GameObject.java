@@ -3,23 +3,49 @@ package com.poizon.engine.objects;
 import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Image;
 import com.poizon.engine.graphics.ImageTile;
+import com.poizon.engine.physics.Component;
 import com.poizon.engine.render.IInitializable;
 import com.poizon.engine.render.IRenderable;
 import com.poizon.engine.render.IUpdateable;
 
+import java.util.ArrayList;
+
 public abstract class GameObject implements IInitializable, IUpdateable, IRenderable {
-    protected Image sprite;
+    public Image sprite;
     protected int positionX, positionY;
-    protected int width, height;
     protected int[] spriteIndex;
     protected boolean visible;
+    protected boolean alive;
+
+    private ArrayList<Component> components = new ArrayList<>();
 
     public GameObject() {
         this.positionX = 0;
         this.positionY = 0;
         this.spriteIndex = new int[] { 0, 0 };
         this.visible = true;
+        this.alive = true;
     }
+
+    public void addComponent(Component component) {
+        this.components.add(component);
+    }
+
+    public void updateComponents(Game game, float deltaTime) {
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).update(game, deltaTime);
+        }
+    }
+
+    public void renderComponents(Game game) {
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).render(game);
+        }
+    }
+
+    public void onCollisionEvent(GameObject other) {}
+
+
 
     @Override
     public void init(Game game) {
@@ -31,7 +57,7 @@ public abstract class GameObject implements IInitializable, IUpdateable, IRender
         if(visible && sprite != null) {
             if(sprite instanceof ImageTile) {
                 game.renderer.drawImageTile((ImageTile)sprite, positionX, positionY, spriteIndex[0], spriteIndex[1]);
-            } else if(sprite instanceof Image) {
+            } else {
                 game.renderer.drawImage(sprite, positionX, positionY);
             }
 
@@ -68,18 +94,34 @@ public abstract class GameObject implements IInitializable, IUpdateable, IRender
     }
 
     public int getWidth() {
-        return width;
-    }
+        if(sprite != null) {
+            if(sprite instanceof ImageTile) {
+                return ((ImageTile) sprite).getTileWidth();
+            } else {
+                return sprite.getWidth();
+            }
+        }
 
-    public void setWidth(int width) {
-        this.width = width;
+        return 0;
     }
 
     public int getHeight() {
-        return height;
+        if(sprite != null) {
+            if(sprite instanceof ImageTile) {
+                return ((ImageTile) sprite).getTileHeight();
+            } else {
+                return sprite.getHeight();
+            }
+        }
+
+        return 0;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

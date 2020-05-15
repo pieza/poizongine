@@ -290,6 +290,34 @@ public class Renderer implements IRenderer {
     }
 
     @Override
+    public void drawRect(int x, int y, int width, int height, int color) {
+        x -= cameraX;
+        y -= cameraY;
+
+        for(int i = x; i < x + width; i++) {
+            setPixel(i, y, color);
+            setPixel(i, y + height - 1, color);
+        }
+
+        for(int i = y; i < y + height; i++) {
+            setPixel(x, i, color);
+            setPixel(x + width - 1, i, color);
+        }
+    }
+
+    @Override
+    public void drawFillRect(int x, int y, int width, int height, int color) {
+        x -= cameraX;
+        y -= cameraY;
+
+        for(int j = y ; j < y + height; j++) {
+            for(int i = x; i < x + width; i++) {
+                setPixel(i, j, color);
+            }
+        }
+    }
+
+    @Override
     public void drawLight(Light light, int offX, int offY) {
         lightRequests.add(new LightRequest(light, offX, offY));
     }
