@@ -32,9 +32,13 @@ public class Camera implements IUpdateable, IRenderable {
         int targetX = (target.getPositionX() + target.getWidth() / 2) - game.settings.getScreenWidth() / 2;
         int targetY = (target.getPositionY() + target.getHeight() / 2) - game.settings.getScreenHeight() / 2;
 
-
+        //offX = targetX;
+        //offY = targetY;
         offX -= deltaTime * (offX - targetX) * speed;
         offY -= deltaTime * (offY - targetY) * speed;
+
+        if(offX < 0) offX = 0;
+        if(offY < 0) offY = 0;
     }
 
     @Override

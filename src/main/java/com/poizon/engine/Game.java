@@ -8,6 +8,7 @@ import com.poizon.engine.exceptions.MissingSceneException;
 import com.poizon.engine.input.GameInput;
 import com.poizon.engine.input.Input;
 import com.poizon.engine.objects.GameObject;
+import com.poizon.engine.physics.collision.CollisionMap;
 import com.poizon.engine.render.IRenderer;
 import com.poizon.engine.render.Renderer;
 import com.poizon.engine.scenes.GameScene;
@@ -31,6 +32,7 @@ public final class Game {
     public Input input;
     public Settings settings;
     public Camera camera;
+    public CollisionMap collisionMap;
 
     public Game() {
         // load defaults settings

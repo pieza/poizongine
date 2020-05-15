@@ -3,6 +3,7 @@ package com.poizon.engine.containers;
 import com.poizon.engine.Game;
 import com.poizon.engine.camera.Camera;
 import com.poizon.engine.exceptions.MissingSceneException;
+import com.poizon.engine.physics.Physix;
 import com.poizon.engine.scenes.DebugScene;
 import com.poizon.engine.scenes.GameScene;
 import com.poizon.engine.scenes.ISceneManager;
@@ -84,6 +85,9 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
                 deltaTime = (float)UPDATE_CAP;
 
                 if(game.settings.isDebug()) debugScene.update(game, deltaTime);
+
+                //TODO: re-think this
+                Physix.update();
 
                 GameScene scene = getActualScene();
                 if(scene != null) {
@@ -170,6 +174,7 @@ public class GameContainer implements Runnable, IContainer, ISceneManager {
         if(scene == null) throw new MissingSceneException(key);
         game.logger.log(LogLevel.TRACE, String.format("Initializing scene %s.", key));
         scene.init(game);
+        scene.initializeObjects(game);
         actualScene = key;
     }
 }
