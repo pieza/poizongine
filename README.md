@@ -1,6 +1,9 @@
 # poizongine
 Game engine
 
+<a href="https://github.com/pieza/poizongine/workflows/build">
+  <img src="https://github.com/pieza/poizongine/workflows/build/badge.svg" alt="build status"></a>
+        
 <a href="https://github.com/Pieza/poizongine/issues">
   <img alt="GitHub issues" src="https://img.shields.io/github/issues/Pieza/poizongine"></a>
       
