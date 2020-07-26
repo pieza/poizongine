@@ -13,6 +13,7 @@ public class Player extends GameObject {
 
 
     public Player() {
+        setPaddingX(-1);
         sprite = new ImageTile("/sprites/player.png", 19, 21);
         sprite.setAlpha(true);
 

@@ -3,7 +3,7 @@ package com.poizon.engine.physics.collision;
 import com.poizon.engine.Game;
 import com.poizon.engine.graphics.Color;
 import com.poizon.engine.objects.GameObject;
-import com.poizon.engine.physics.Component;
+import com.poizon.engine.objects.Component;
 import com.poizon.engine.physics.Physix;
 
 public class CollisionComponent extends Component {
