@@ -159,6 +159,8 @@ public abstract class GameObject implements IInitializable, IUpdateable, IRender
     }
 
     public int getWidth() {
+        if(width > 0) return width - paddingX;
+
         if(sprite != null) {
             if(sprite instanceof ImageTile) {
                 return ((ImageTile) sprite).getTileWidth() - paddingX;
@@ -167,10 +169,12 @@ public abstract class GameObject implements IInitializable, IUpdateable, IRender
             }
         }
 
-        return width - paddingX;
+        return 0;
     }
 
     public int getHeight() {
+        if(height > 0) return height - paddingY;
+
         if(sprite != null) {
             if(sprite instanceof ImageTile) {
                 return ((ImageTile) sprite).getTileHeight() - paddingY;
@@ -179,7 +183,8 @@ public abstract class GameObject implements IInitializable, IUpdateable, IRender
             }
         }
 
-        return height - paddingY;
+        return 0;
+
     }
 
     public int getPaddingX() {
