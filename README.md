@@ -25,7 +25,7 @@ allprojects {
 
 ```gradle
 dependencies {
-  implementation 'com.github.pieza:pizongine:Tag'
+  implementation 'com.github.pieza:poizongine:Tag'
 }
 ```
 
